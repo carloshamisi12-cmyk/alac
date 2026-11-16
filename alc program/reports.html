@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Reports - School Management System</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <style>
+        .payment-status { padding: 4px 8px; border-radius: 12px; font-size: 12px; font-weight: 600; }
+        .status-completed { background-color: #D1FAE5; color: #065F46; }
+        .status-pending { background-color: #FEF3C7; color: #92400E; }
+        .status-failed { background-color: #FEE2E2; color: #B91C1C; }
+        #paymentTable tbody tr { transition: all 0.2s ease; }
+        #paymentTable tbody tr:hover { background-color: #F9FAFB; }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div class="flex h-screen overflow-hidden">
+        <!-- Sidebar -->
+        <div class="sidebar bg-white w-64 border-r border-gray-200 flex-shrink-0 overflow-y-auto">
+            <div class="p-4 border-b border-gray-200">
+                <div class="flex items-center">
+                    <img src="images/logo.png" alt="School Logo" class="h-10 w-10 rounded-full">
+                    <div class="ml-3">
+                        <h2 class="text-lg font-semibold text-gray-800">Agape Life Academy</h2>
+                        <p class="text-xs text-gray-500">School Management System</p>
+                    </div>
+                </div>
+            </div>
+            <nav class="p-4 space-y-1">
+                <a href="admin.html" class="nav-link group flex items-center px-4 py-3 text-sm font-medium rounded-lg">
+                    <i class="fas fa-tachometer-alt text-gray-500 mr-3 w-6"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="reports.html" class="nav-link group flex items-center px-4 py-3 text-sm font-medium rounded-lg bg-blue-50 text-blue-700">
+                    <i class="fas fa-chart-bar text-blue-600 mr-3 w-6"></i>
+                    <span>Reports</span>
+                </a>
+                <!-- Add other navigation items as needed -->
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-1 flex flex-col overflow-hidden">
+            <!-- Top Navigation -->
+            <header class="bg-white shadow-sm z-10">
+                <div class="flex items-center justify-between px-6 py-4">
+                    <div class="flex items-center">
+                        <button id="sidebarToggle" class="text-gray-500 focus:outline-none lg:hidden">
+                            <i class="fas fa-bars text-xl"></i>
+                        </button>
+                        <h1 class="text-xl font-semibold text-gray-800 ml-4">Payment Reports</h1>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Page Content -->
+            <main class="flex-1 overflow-y-auto p-6 bg-gray-50">
+                <!-- Summary Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+                    <div class="bg-white rounded-xl shadow-sm p-6 border-l-4 border-blue-500">
+                        <p class="text-sm font-medium text-gray-500">Total Payments</p>
+                        <h3 class="text-2xl font-bold text-gray-800" id="totalPayments">0</h3>
+                    </div>
+                    <div class="bg-white rounded-xl shadow-sm p-6 border-l-4 border-green-500">
+                        <p class="text-sm font-medium text-gray-500">Total Amount</p>
+                        <h3 class="text-2xl font-bold text-gray-800" id="totalAmount">Ksh 0</h3>
+                    </div>
+                    <div class="bg-white rounded-xl shadow-sm p-6 border-l-4 border-amber-500">
+                        <p class="text-sm font-medium text-gray-500">Pending</p>
+                        <h3 class="text-2xl font-bold text-gray-800" id="pendingPayments">0</h3>
+                    </div>
+                    <div class="bg-white rounded-xl shadow-sm p-6 border-l-4 border-purple-500">
+                        <p class="text-sm font-medium text-gray-500">Average</p>
+                        <h3 class="text-2xl font-bold text-gray-800" id="averagePayment">Ksh 0</h3>
+                    </div>
+                </div>
+
+                <!-- Payments Table -->
+                <div class="bg-white rounded-xl shadow-sm overflow-hidden">
+                    <div class="px-6 py-4 border-b border-gray-200">
+                        <h2 class="text-lg font-semibold text-gray-800">Payment Transactions</h2>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table id="paymentTable" class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Student</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Amount</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Method</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200" id="paymentTableBody">
+                                <tr>
+                                    <td colspan="5" class="px-6 py-4 text-center text-gray-500">Loading payment data...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
+    <script src="firebase-config.js"></script>
+    <script>
+        // Initialize Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const auth = firebase.auth();
+        
+        // Set Firestore settings
+        const settings = { timestampsInSnapshots: true };
+        db.settings(settings);
+        
+        // Format date helper function
+        function formatDate(timestamp) {
+            if (!timestamp) return 'N/A';
+            try {
+                const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
+                return date.toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+            } catch (e) {
+                console.error('Error formatting date:', e);
+                return 'Invalid date';
+            }
+        }
+        
+        // Load payment data
+        async function loadPaymentData() {
+            try {
+                const loadingRow = document.getElementById('loadingRow');
+                if (loadingRow) {
+                    loadingRow.innerHTML = '<td colspan="5" class="px-6 py-4 text-center text-gray-500">Loading payment data...</td>';
+                }
+                
+                const paymentsSnapshot = await db.collection('payments')
+                    .orderBy('timestamp', 'desc')
+                    .get();
+                
+                if (paymentsSnapshot.empty) {
+                    document.getElementById('paymentTableBody').innerHTML = `
+                        <tr>
+                            <td colspan="5" class="px-6 py-4 text-center text-gray-500">
+                                No payment records found.
+                            </td>
+                        </tr>`;
+                    return;
+                }
+                
+                const payments = [];
+                let totalAmount = 0;
+                let pendingCount = 0;
+                
+                // Process payments
+                for (const doc of paymentsSnapshot.docs) {
+                    try {
+                        const payment = { id: doc.id, ...doc.data() };
+                        // Ensure required fields exist
+                        payment.amount = parseFloat(payment.amount || 0);
+                        payment.status = payment.status || 'pending';
+                        payment.paymentMethod = payment.paymentMethod || 'Cash';
+                        payment.studentName = payment.studentName || 'Unknown Student';
+                        payment.studentId = payment.studentId || 'N/A';
+                        
+                        payments.push(payment);
+                        totalAmount += payment.amount;
+                        if (payment.status === 'pending') pendingCount++;
+                    } catch (e) {
+                        console.error('Error processing payment:', e);
+                    }
+                }
+                
+                // Update summary cards
+                document.getElementById('totalPayments').textContent = payments.length;
+                document.getElementById('totalAmount').textContent = `Ksh ${totalAmount.toLocaleString()}`;
+                document.getElementById('pendingPayments').textContent = pendingCount;
+                document.getElementById('averagePayment').textContent = `Ksh ${(payments.length ? totalAmount / payments.length : 0).toFixed(2)}`;
+                
+                // Render table
+                renderPaymentsTable(payments);
+                
+            } catch (error) {
+                console.error('Error loading payment data:', error);
+                document.getElementById('paymentTableBody').innerHTML = `
+                    <tr>
+                        <td colspan="5" class="px-6 py-4 text-center text-red-500">
+                            Error loading payment data. Please try again.
+                        </td>
+                    </tr>`;
+            }
+        }
+        
+        // Render payments table
+        function renderPaymentsTable(payments) {
+            const tbody = document.getElementById('paymentTableBody');
+            
+            if (!payments || payments.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="5" class="px-6 py-4 text-center text-gray-500">
+                            No payment records found.
+                        </td>
+                    </tr>`;
+                return;
+            }
+            
+            tbody.innerHTML = payments.map(payment => `
+                <tr class="hover:bg-gray-50">
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="font-medium text-gray-900">${payment.studentName}</div>
+                        <div class="text-sm text-gray-500">${payment.studentId}</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        ${formatDate(payment.timestamp || payment.date)}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                        Ksh ${payment.amount.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        ${payment.paymentMethod}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="payment-status status-${payment.status.toLowerCase()}">
+                            ${payment.status.toUpperCase()}
+                        </span>
+                    </td>
+                </tr>
+            `).join('');
+        }
+        
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', () => {
+            // Check authentication
+            auth.onAuthStateChanged((user) => {
+                if (!user) {
+                    window.location.href = 'login.html';
+                    return;
+                }
+                
+                // Load data
+                loadPaymentData().catch(console.error);
+                
+                // Set up event listeners
+                setupEventListeners();
+            });
+        });
+        
+        function setupEventListeners() {
+            // Toggle sidebar on mobile
+            const sidebarToggle = document.getElementById('sidebarToggle');
+            if (sidebarToggle) {
+                sidebarToggle.addEventListener('click', () => {
+                    document.querySelector('.sidebar').classList.toggle('-translate-x-full');
+                    document.querySelector('.sidebar').classList.toggle('md:translate-x-0');
+                });
+            }
+            
+            // Logout button
+            const logoutBtn = document.getElementById('logoutBtn');
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', async (e) => {
+                    e.preventDefault();
+                    try {
+                        await auth.signOut();
+                        window.location.href = 'login.html';
+                    } catch (error) {
+                        console.error('Error signing out:', error);
+                        alert('Error signing out. Please try again.');
+                    }
+                });
+            }
+        }
+        
+        // Handle window resize for sidebar
+        window.addEventListener('resize', () => {
+            const sidebar = document.querySelector('.sidebar');
+            if (window.innerWidth >= 768) {
+                sidebar.classList.remove('-translate-x-full');
+            } else if (!sidebar.classList.contains('-translate-x-full')) {
+                sidebar.classList.add('-translate-x-full');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,16 @@
+[debug] [2025-08-07T14:27:18.014Z] ----------------------------------------------------------------------
+[debug] [2025-08-07T14:27:18.018Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\user\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy --only hosting
+[debug] [2025-08-07T14:27:18.018Z] CLI Version:   14.11.2
+[debug] [2025-08-07T14:27:18.019Z] Platform:      win32
+[debug] [2025-08-07T14:27:18.019Z] Node Version:  v22.17.0
+[debug] [2025-08-07T14:27:18.020Z] Time:          Thu Aug 07 2025 17:27:18 GMT+0300 (East Africa Time)
+[debug] [2025-08-07T14:27:18.020Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2025-08-07T14:27:18.413Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2025-08-07T14:27:18.414Z] > authorizing via signed-in user (aingananellyn@gmail.com)
+[debug] [2025-08-07T14:27:18.414Z] [iam] checking project agapeschoolprogram for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2025-08-07T14:27:18.416Z] Checked if tokens are valid: false, expires at: 1754575366647
+[debug] [2025-08-07T14:27:18.416Z] Checked if tokens are valid: false, expires at: 1754575366647
+[debug] [2025-08-07T14:27:18.417Z] > refreshing access token with scopes: []
+[debug] [2025-08-07T14:27:18.419Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-08-07T14:27:18.419Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]

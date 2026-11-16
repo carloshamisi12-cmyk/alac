@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School Management System</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+</head>
+<body class="bg-gradient-to-br from-blue-900 to-blue-700 min-h-screen">
+    <div class="container mx-auto px-4 py-16">
+        <div class="text-center mb-12">
+            <h1 class="text-4xl font-bold text-white mb-4">Welcome to Agape Life Centre Academy School Management System</h1>
+            <p class="text-xl text-blue-200">Please select your portal</p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 max-w-6xl mx-auto">
+            <!-- Admin Portal -->
+            <div class="portal-card rounded-xl p-8 text-center cursor-pointer" onclick="window.location.href='admin-login.html'">
+                <div class="bg-blue-600 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <i class="fas fa-user-shield text-3xl text-white"></i>
+                </div>
+                <h3 class="text-xl font-semibold mb-2 text-white">Admin Portal</h3>
+                <p class="text-blue-200">Access administrative functions and settings</p>
+            </div>
+
+            <!-- Teacher Portal -->
+            <div class="portal-card rounded-xl p-8 text-center cursor-pointer" onclick="window.location.href='teacher-login.html'">
+                <div class="bg-green-600 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <i class="fas fa-chalkboard-teacher text-3xl text-white"></i>
+                </div>
+                <h3 class="text-xl font-semibold mb-2 text-white">Teacher Portal</h3>
+                <p class="text-blue-200">Access teaching resources and student records</p>
+            </div>
+
+            <!-- Student Portal -->
+            <div class="portal-card rounded-xl p-8 text-center cursor-pointer" onclick="window.location.href='student-login.html'">
+                <div class="bg-yellow-600 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <i class="fas fa-user-graduate text-3xl text-white"></i>
+                </div>
+                <h3 class="text-xl font-semibold mb-2 text-white">Student Portal</h3>
+                <p class="text-blue-200">View your academic progress and fees</p>
+            </div>
+
+            <!-- Parent Portal -->
+            <div class="portal-card rounded-xl p-6 text-center cursor-pointer" onclick="window.location.href='parent-login.html'">
+                <div class="bg-purple-600 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-users text-2xl text-white"></i>
+                </div>
+                <h3 class="text-lg font-semibold mb-1 text-white">Parent Portal</h3>
+                <p class="text-blue-200 text-sm">Monitor your child's progress and fees</p>
+            </div>
+            
+            <!-- Student List -->
+            <div class="portal-card rounded-xl p-6 text-center cursor-pointer bg-gradient-to-br from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 transition-all duration-300 transform hover:scale-105" 
+                 onclick="window.location.href='student-list.html'"
+                 title="Access student records and fee management">
+                <div class="bg-white bg-opacity-20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-list-ul text-2xl text-white"></i>
+                </div>
+                <h3 class="text-lg font-semibold mb-1 text-white">Student List</h3>
+                <p class="text-blue-100 text-sm">Manage student records and fees</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Registration Button -->
+    <div class="text-center mt-12 mb-8">
+        <a href="admin/student-registration.html" class="inline-flex items-center px-8 py-4 bg-gradient-to-r from-green-500 to-green-600 text-white text-lg font-semibold rounded-full shadow-lg hover:from-green-600 hover:to-green-700 transition-all duration-300 transform hover:scale-105">
+            <i class="fas fa-user-plus mr-3 text-xl"></i>
+            Register New Student
+        </a>
+    </div>
+
+    <footer class="text-center text-blue-200 py-4">
+        <p>&copy; 2025 Agape Life Centre Academy School Management System. All rights reserved.</p>
+    </footer>
+
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
+    <script src="firebase-config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="portal-access.js"></script>
+</body>
+</html>
